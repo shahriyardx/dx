@@ -27,6 +27,9 @@ async def shorten(url, title):
             async with session.post(
                 "https://shahriyar.dev/api/shorten",
                 data=json.dumps({"url": url, "title": title}),
+                headers=json.dumps(
+                    {"Authorization": os.environ["PORTFOLIO_AUTH_TOKEN"]}
+                ),
             ) as response:
                 data = await response.json()
 
@@ -43,7 +46,12 @@ async def links(search):
     """show a list of shortened links"""
     with Halo(text="Loading.."):
         async with aiohttp.ClientSession() as session:
-            async with session.get("https://shahriyar.dev/api/shorten") as response:
+            async with session.get(
+                "https://shahriyar.dev/api/shorten",
+                headers=json.dumps(
+                    {"Authorization": os.environ["PORTFOLIO_AUTH_TOKEN"]}
+                ),
+            ) as response:
                 data = await response.json()
 
     def show_links():
