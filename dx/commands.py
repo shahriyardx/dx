@@ -6,6 +6,7 @@ import aiohttp
 import asyncclick as click
 from dotenv import load_dotenv
 from halo import Halo
+from pyperclip import copy
 
 from .tree import TreeGenerator
 
@@ -27,12 +28,13 @@ async def shorten(url, title):
             async with session.post(
                 "https://shahriyar.dev/api/shorten",
                 data=json.dumps({"url": url, "title": title}),
-                headers={"Authorization": os.environ["PORTFOLIO_AUTH_TOKEN"]},
+                headers={"Authorization": os.getenv("PORTFOLIO_AUTH_TOKEN")},
             ) as response:
                 data = await response.json()
 
     success = data.get("success")
     if success:
+        copy(f"https://shahriyar.dev/links/{data['data']['text']}")
         print(f"Shortened URL: https://shahriyar.dev/links/{data['data']['text']}")
     else:
         print(f"{data['error']}")
@@ -46,7 +48,7 @@ async def links(search):
         async with aiohttp.ClientSession() as session:
             async with session.get(
                 "https://shahriyar.dev/api/shorten",
-                headers={"Authorization": os.environ["PORTFOLIO_AUTH_TOKEN"]},
+                headers={"Authorization": os.getenv("PORTFOLIO_AUTH_TOKEN")},
             ) as response:
                 data = await response.json()
 
@@ -68,6 +70,31 @@ async def links(search):
     show_links()
 
 
+@dx.command(name="git-init")
+@click.option("--files", "-f", default=".", help="files to add")
+@click.option("--origin", "-o", default=None, help="origin url")
+@click.option("--branch", "-b", default="main", help="default branch")
+@click.option("--message", "-m", default=None, help="initial commit message")
+async def git_init(files, origin, branch, message):
+    print(files, origin, branch, message)
+
+    print(subprocess.check_output(["git", "init"]).decode("ascii"))
+    print(subprocess.check_output(["git", "add", files]).decode("ascii"))
+
+    if branch:
+        print(subprocess.check_output(["git", "branch", "-M", branch]).decode("ascii"))
+
+    if origin:
+        print(
+            subprocess.check_output(["git", "remote", "add", "origin", origin]).decode(
+                "ascii"
+            )
+        )
+
+    if message:
+        print(subprocess.check_output(["git", "commit", "-m", message]).decode("ascii"))
+
+
 @dx.command(name="create-repo")
 @click.argument("name")
 async def create_repo(name):
@@ -82,12 +109,13 @@ async def create_repo(name):
                     "name": name,
                 }
             ),
-            headers={"Authorization": f"token {os.environ['GITHUB_TOKEN']}"},
+            headers={"Authorization": f"token {os.getenv('GITHUB_TOKEN')}"},
         ) as resp:
             data = await resp.json()
             if data.get("errors"):
                 return print("Error:", data["errors"][0]["message"])
             else:
+                copy(data["html_url"])
                 print("Repo Created", data["html_url"])
 
 
