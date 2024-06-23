@@ -76,8 +76,6 @@ async def links(search):
 @click.option("--branch", "-b", default="main", help="default branch")
 @click.option("--message", "-m", default=None, help="initial commit message")
 async def git_init(files, origin, branch, message):
-    print(files, origin, branch, message)
-
     print(subprocess.check_output(["git", "init"]).decode("ascii"))
     print(subprocess.check_output(["git", "add", files]).decode("ascii"))
 
