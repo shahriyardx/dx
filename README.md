@@ -1,4 +1,2 @@
-# Personal url shortener
-```shell
-shorten https://google.com --title google
-```
+# dx
+a helper command line utility for personal use
