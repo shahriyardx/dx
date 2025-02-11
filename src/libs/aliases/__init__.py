@@ -1,6 +1,6 @@
 """
-    Extension for the python ``click`` module
-    to provide a group or command with aliases.
+Extension for the python ``click`` module
+to provide a group or command with aliases.
 """
 
 import asyncclick as click

@@ -2,11 +2,14 @@ import subprocess
 
 
 def run_command(commands, type="check_output"):
-    if type == "check_output":
-        print(subprocess.check_output(commands).decode("ascii"))
+    try:
+        if type == "check_output":
+            print(subprocess.check_output(commands).decode("ascii"))
 
-    if type == "call":
-        subprocess.call(commands)
+        if type == "call":
+            subprocess.call(commands)
+    except Exception as e:
+        print(e)
 
 
 def get_current_branch(repo_path="."):

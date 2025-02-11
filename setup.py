@@ -20,7 +20,7 @@ setup(
     description="utility tools",  # Optional
     long_description=_get_long_desc(),
     long_description_content_type="text/markdown",
-    url="https://github.com/shahriyardx/easy-pil",
+    url="https://github.com/shahriyardx/dx",
     author="Md Shahriyar Alam",
     author_email="contact@shahriyar.dev",
     classifiers=[

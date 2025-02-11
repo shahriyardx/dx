@@ -62,10 +62,10 @@ async def create_repo(name, token):
         ) as resp:
             data = await resp.json()
             if resp.status == 401 or resp.status == 403:
-                return print("Error: {data['message']}")
+                return print(f"Error: {data['message']}")
 
             if data.get("errors"):
-                return print("Error:", data["errors"][0]["message"])
+                return print(f"Error: {data['errors'][0]['message']}")
 
             copy(data["html_url"])
             print("Repo Created", data["html_url"])

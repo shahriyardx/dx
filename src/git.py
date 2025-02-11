@@ -11,6 +11,7 @@ def get_token():
     token = keyring.get_password("dx", getpass.getuser())
     return token
 
+
 def get_or_save_token(token):
     if token:
         save_token(token)
